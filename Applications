@@ -1,0 +1,170 @@
+#!/usr/bin/env python3
+import os
+import wget
+import tarfile
+import subprocess
+import requests
+import shutil
+import sys
+
+
+def download_file(url, filename):
+    """Downloads a file from the specified URL to the specified filename."""
+    downloads_directory = os.path.join(os.path.expanduser('~'), 'Downloads')
+    filepath = os.path.join(downloads_directory, filename)
+
+    print('Downloading file...')
+    response = requests.get(url)
+    with open(filepath, 'wb') as file:
+        file.write(response.content)
+    print('Download complete.')
+
+def install_application(filename):
+    """Installs the application from the specified filename using a sudo command."""
+    filepath = os.path.join(os.path.expanduser('~'), 'Downloads', filename)
+
+    print('Installing application...')
+    install_command = ['sudo', 'dpkg', '-i', filepath]
+    subprocess.run(install_command, check=True)
+    print('Installation complete.')
+
+# Usage example
+url = 'https://github.com/sparrowwallet/sparrow/releases/download/1.7.9/sparrow_1.7.9-1_amd64.deb'
+filename = 'sparrow_1.7.9-1_amd64.deb'
+download_file(url, filename)
+install_application(filename)
+
+def download_and_install_tor_browser():
+    # Replace the URL with the latest version's URL
+    url = "https://www.torproject.org/dist/torbrowser/13.0/tor-browser-linux-x86_64-13.0.tar.xz"
+    download_dir = os.path.expanduser('~/Downloads')
+
+    # Use wget to download the Tor Browser
+    subprocess.run(["wget", url], cwd=download_dir)
+
+    # Extract the downloaded tar.xz file
+    tar_file = os.path.join(download_dir, "tor-browser-linux64-13.0.tar.xz")
+    subprocess.run(["tar", "-xf", tar_file], cwd=download_dir)
+
+    # Get the extracted folder name
+    extracted_folder = "tor-browser"
+
+    # Change to the extracted folder
+    os.chdir(os.path.join(download_dir, extracted_folder))
+
+    # Run the Tor Browser installation script
+    subprocess.run(["./start-tor-browser.desktop", "--register-app"])
+
+# Call the function to download and install Tor Browser
+download_and_install_tor_browser()
+
+# Define the URL to download the .deb file
+url = "https://code.samourai.io/whirlpool/whirlpool-gui/uploads/fda2da816431c25598f532486ac0da09/whirlpool-gui_0.10.3_amd64.deb"
+
+# Define the download directory
+download_directory = os.path.expanduser("~/Downloads")
+
+# Define the full path to save the .deb file
+deb_file_path = os.path.join(download_directory, "whirlpool-gui_0.10.3_amd64.deb")
+
+try:
+    # Step 1: Use wget to download the .deb file to the ~/Downloads directory
+    subprocess.run(["wget", url, "-P", download_directory], check=True)
+    print(f".deb file from {url} downloaded to {download_directory} successfully.")
+
+    # Step 2: Install the downloaded .deb package using sudo dpkg -i
+    subprocess.run(["sudo", "dpkg", "-i", deb_file_path], check=True)
+    print(f"Package {deb_file_path} installed successfully.")
+except subprocess.CalledProcessError as e:
+    print(f"Error running command: {e}")
+
+#!/usr/bin/env python3
+import subprocess
+import wget
+
+url = "https://github.com/cryptoadvance/specter-desktop/releases/download/v2.0.2/specter_desktop-v2.0.2-x86_64-linux-gnu.tar.gz"
+download_command = f"wget {url}"
+
+try:
+    subprocess.run(download_command, shell=True, check=True)
+    print("Download completed successfully.")
+except subprocess.CalledProcessError as e:
+    print(f"Download failed with error code {e.returncode}.")
+except Exception as e:
+    print(f"An unexpected error occurred: {str(e)}")
+
+
+# Specify the archive file name
+archive_file = "specter_desktop-v2.0.2-x86_64-linux-gnu.tar.gz"
+
+# Build the tar command
+tar_command = f"tar -xzvf {archive_file}"
+
+try:
+    subprocess.run(tar_command, shell=True, check=True)
+    print(f"Extracted {archive_file} successfully.")
+except subprocess.CalledProcessError as e:
+    print(f"Extraction failed with error code {e.returncode}.")
+except Exception as e:
+    print(f"An unexpected error occurred: {str(e)}")
+
+import subprocess
+
+def enable_universe_repository():
+    try:
+        subprocess.run(["sudo", "add-apt-repository", "universe"], check=True)
+        print("The 'universe' repository has been enabled.")
+    except subprocess.CalledProcessError as e:
+        print(f"Failed to enable the 'universe' repository. Error code: {e.returncode}")
+    except Exception as e:
+        print(f"An unexpected error occurred: {str(e)}")
+
+if __name__ == "__main__":
+    enable_universe_repository()
+
+import subprocess
+
+def install_libfuse2():
+    try:
+        subprocess.run(["sudo", "apt", "install", "libfuse2"], check=True)
+        print("libfuse2 has been successfully installed.")
+    except subprocess.CalledProcessError as e:
+        print(f"Failed to install libfuse2. Error code: {e.returncode}")
+    except Exception as e:
+        print(f"An unexpected error occurred: {str(e)}")
+
+if __name__ == "__main__":
+    install_libfuse2()
+
+# Define the commands to be executed
+commands = [
+    "sudo cp udev/*.rules /etc/udev/rules.d/",
+    "sudo udevadm trigger",
+    "sudo udevadm control --reload-rules",
+    "sudo groupadd plugdev",
+    f"sudo usermod -aG plugdev {subprocess.check_output(['whoami'], text=True).strip()}"
+]
+
+# Execute the commands one by one
+for cmd in commands:
+    try:
+        subprocess.run(cmd, shell=True, check=True)
+    except subprocess.CalledProcessError as e:
+        print(f"Error running command: {cmd}")
+        print(e)
+
+source_file = "Specter-2.0.2.AppImage"
+destination_file = "Specter"
+
+# Execute the 'mv' command to rename the file
+try:
+    subprocess.run(f"mv {source_file} {destination_file}", shell=True, check=True)
+except subprocess.CalledProcessError as e:
+
+import subprocess
+
+# Execute the './Specter' command
+try:
+    subprocess.run("./Specter", shell=True, check=True)
+except subprocess.CalledProcessError as e:
+    print(f"Error running the './Specter' command: {e}")
